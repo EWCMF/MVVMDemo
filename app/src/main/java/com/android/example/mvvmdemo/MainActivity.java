@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.example.mvvmdemo.model.EditTextInput;
+
 public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private EditText editText;
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     }
     
     public void changeText(View view) {
-        textView.setText(editText.getText().toString());
+        EditTextInput editTextInput = new EditTextInput();
+        editTextInput.setInput(editText.getText().toString());
+        textView.setText(editTextInput.getInput());
     }
 }
