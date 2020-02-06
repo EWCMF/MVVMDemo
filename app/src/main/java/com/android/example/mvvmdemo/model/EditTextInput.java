@@ -1,6 +1,7 @@
 package com.android.example.mvvmdemo.model;
+import java.util.Observable;
 
-public class EditTextInput {
+public class EditTextInput extends Observable {
     private String input;
 
     public String getInput() {
@@ -8,6 +9,8 @@ public class EditTextInput {
     }
 
     public void setInput(String input) {
+        setChanged();
+        notifyObservers(input);
         this.input = input;
     }
 }
