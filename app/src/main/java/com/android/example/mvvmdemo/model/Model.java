@@ -1,7 +1,7 @@
 package com.android.example.mvvmdemo.model;
 import java.util.Observable;
 
-public class EditTextInput extends Observable {
+public class Model extends Observable {
     private String input;
 
     public String getInput() {
