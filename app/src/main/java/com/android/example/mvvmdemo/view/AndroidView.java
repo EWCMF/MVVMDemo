@@ -20,8 +20,6 @@ public class AndroidView extends AppCompatActivity {
     private Model model = new Model();
     private LowerCasePresenter lowerCasePresenter = new LowerCasePresenter();
     private DbHelper dbHelper;
-    private SQLiteDatabase db;
-    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +32,40 @@ public class AndroidView extends AppCompatActivity {
         model.addObserver(lowerCasePresenter);
 
         dbHelper = new DbHelper(this);
-        db = dbHelper.getReadableDatabase();
 
-        cursor = dbHelper.getAllData();
+        Cursor cursor = dbHelper.getAllData();
         cursor.moveToNext();
 
         textView.setText(cursor.getString(cursor.getColumnIndex("currentString")));
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                setPriority(MIN_PRIORITY);
+                while(!isInterrupted()) {
+
+                    try {
+                        Thread.sleep(1000);
+                        Cursor cursor = dbHelper.getAllData();
+                        cursor.moveToNext();
+
+                        if (!textView.getText().equals(cursor.getString(cursor.getColumnIndex("currentString")))) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Cursor cursor = dbHelper.getAllData();
+                                    cursor.moveToNext();
+                                    textView.setText(cursor.getString(cursor.getColumnIndex("currentString")));
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -51,9 +77,9 @@ public class AndroidView extends AppCompatActivity {
 
     public void changeText(View view) {
         model.setInput(editText.getText().toString());
-        textView.setText(lowerCasePresenter.getString());
-
-        db = dbHelper.getWritableDatabase();
+        Cursor cursor = dbHelper.getAllData();
+        cursor.moveToNext();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DbHelper.COL_2, lowerCasePresenter.getString());
 
