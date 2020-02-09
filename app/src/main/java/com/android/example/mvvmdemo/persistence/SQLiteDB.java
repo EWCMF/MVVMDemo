@@ -6,14 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DbHelper extends SQLiteOpenHelper {
+public class SQLiteDB extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "database.db";
     public static final String TABLE_NAME = "string";
     private static final String COL_1 = "id";
     public static final String COL_2 = "currentString";
 
-    public DbHelper(Context context) {
+    public SQLiteDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         Cursor cursor = getAllData();
