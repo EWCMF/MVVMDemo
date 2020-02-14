@@ -9,10 +9,10 @@ public class Model extends Observable {
     }
 
     public void setInput(String input) {
-        if (!this.input.equals(input)) {
+        if (input != null) {
             this.input = input;
-            setChanged();
-            notifyObservers();
+            super.setChanged();
+            super.notifyObservers();
         }
     }
 }
